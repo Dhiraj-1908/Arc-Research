@@ -1,0 +1,396 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <!-- Enhanced metal gradients with more dramatic Iron Man colors -->
+    <linearGradient id="ironManRedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8A0303" />
+      <stop offset="45%" stop-color="#C20000" />
+      <stop offset="55%" stop-color="#C20000" />
+      <stop offset="100%" stop-color="#6B0000" />
+    </linearGradient>
+    
+    <linearGradient id="copperGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B87333" />
+      <stop offset="45%" stop-color="#EDA867" />
+      <stop offset="55%" stop-color="#EDA867" />
+      <stop offset="100%" stop-color="#8B4513" />
+    </linearGradient>
+    
+    <linearGradient id="enhancedSilverGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C0C0C0" />
+      <stop offset="45%" stop-color="#F5F5F5" />
+      <stop offset="55%" stop-color="#F5F5F5" />
+      <stop offset="100%" stop-color="#A9A9A9" />
+    </linearGradient>
+    
+    <linearGradient id="darkMetalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#444444" />
+      <stop offset="45%" stop-color="#666666" />
+      <stop offset="55%" stop-color="#666666" />
+      <stop offset="100%" stop-color="#222222" />
+    </linearGradient>
+    
+    <!-- Enhanced shadows for better depth -->
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.5" flood-color="#111111"/>
+    </filter>
+    
+    <!-- Enhanced text shadow -->
+    <filter id="textShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-opacity="0.7" flood-color="#111111"/>
+    </filter>
+    
+    <!-- Enhanced metallic shine -->
+    <linearGradient id="metalShine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.3)" />
+      <stop offset="20%" stop-color="rgba(255,255,255,0.5)" />
+      <stop offset="25%" stop-color="rgba(255,255,255,0.7)" />
+      <stop offset="30%" stop-color="rgba(255,255,255,0.5)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0.3)" />
+    </linearGradient>
+    
+    <!-- Enhanced energy glow with brighter blues -->
+    <radialGradient id="energyGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#40C4FF">
+        <animate attributeName="stop-color" values="#40C4FF; #2196F3; #0D8BF2; #2196F3; #40C4FF" dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="80%" stop-color="#0D8BF2">
+        <animate attributeName="stop-color" values="#0D8BF2; #0277BD; #01579B; #0277BD; #0D8BF2" dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#01579B">
+        <animate attributeName="stop-color" values="#01579B; #0D47A1; #01579B; #0D47A1; #01579B" dur="4s" repeatCount="indefinite"/>
+      </stop>
+    </radialGradient>
+    
+    <!-- Enhanced light reflection -->
+    <radialGradient id="lightReflection" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="rgba(255,255,255,1)" />
+      <stop offset="50%" stop-color="rgba(255,255,255,0)" />
+    </radialGradient>
+    
+    <!-- Enhanced pulsing glow filter -->
+    <filter id="pulseGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.16 0 0 0 0 0.71 0 0 0 0 0.96 0 0 0 1 0" result="glow"/>
+      <feBlend in="SourceGraphic" in2="glow" mode="screen"/>
+    </filter>
+    
+    <!-- Ping ball glow -->
+    <filter id="pingBallGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" result="glow"/>
+      <feBlend in="SourceGraphic" in2="glow" mode="screen"/>
+    </filter>
+    
+    <!-- Updated text gradient with deeper black -->
+    <linearGradient id="titleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#222222" />
+      <stop offset="50%" stop-color="#0A0A0A" />
+      <stop offset="100%" stop-color="#000000" />
+    </linearGradient>
+    
+    <!-- Text shadow for better legibility -->
+    <filter id="subtleTextShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity="0.4" flood-color="#000000"/>
+    </filter>
+    
+    <!-- New background gradient -->
+    <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAFAFA" />
+      <stop offset="100%" stop-color="#E0E0E0" />
+    </linearGradient>
+    
+    <!-- Ping ball gradient -->
+    <radialGradient id="pingBallGradient" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#40C4FF" />
+      <stop offset="100%" stop-color="#0D8BF2" />
+    </radialGradient>
+    
+    <!-- Magnifying glass gradient -->
+    <linearGradient id="magnifyingGlassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#666666" />
+      <stop offset="50%" stop-color="#444444" />
+      <stop offset="100%" stop-color="#222222" />
+    </linearGradient>
+    
+    <!-- Magnifying glass handle gradient -->
+    <linearGradient id="handleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8A0303" />
+      <stop offset="50%" stop-color="#C20000" />
+      <stop offset="100%" stop-color="#6B0000" />
+    </linearGradient>
+    
+    <!-- NEW: Glowing light gradient -->
+    <radialGradient id="glowingLightGradient" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="40%" stop-color="#40C4FF" />
+      <stop offset="100%" stop-color="#0D8BF2" />
+    </radialGradient>
+    
+    <!-- NEW: Strong glow filter for lights -->
+    <filter id="strongGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.25 0 0 0 0 0.75 0 0 0 0 1 0 0 0 1 0" result="glow"/>
+      <feBlend in="SourceGraphic" in2="glow" mode="screen"/>
+    </filter>
+  </defs>
+  
+  <!-- Enhanced background pattern -->
+  <rect width="800" height="500" fill="url(#backgroundGradient)" />
+  <pattern id="subtlePattern" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <rect width="20" height="20" fill="none" />
+    <line x1="0" y1="0" x2="0" y2="20" stroke="#F0F0F0" stroke-width="1" />
+    <line x1="0" y1="0" x2="20" y2="0" stroke="#F0F0F0" stroke-width="1" />
+  </pattern>
+  <rect width="800" height="500" fill="url(#subtlePattern)" opacity="0.7" />
+  
+  <!-- Main reactor assembly - ENLARGED -->
+  <g transform="translate(400, 230) scale(1.2)">
+    <!-- Outer ring with Iron Man maroon finish -->
+    <circle cx="0" cy="0" r="120" fill="url(#ironManRedGradient)" stroke="#520404" stroke-width="2" filter="url(#softShadow)">
+      <!-- Subtle expansion animation -->
+      <animate attributeName="r" values="120;123;120" dur="7s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Inner housing with enhanced silver finish -->
+    <circle cx="0" cy="0" r="105" fill="url(#enhancedSilverGradient)" stroke="#A9A9A9" stroke-width="1.5">
+      <!-- Slight breathing effect -->
+      <animate attributeName="r" values="105;107;105" dur="5s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Copper segments on outer ring with rotation -->
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="100s" repeatCount="indefinite" additive="sum" />
+      
+      <!-- 12 copper segments around the circle -->
+      <g transform="rotate(0)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(30)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(60)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(90)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(120)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(150)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(180)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(210)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(240)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(270)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(300)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+      <g transform="rotate(330)">
+        <rect x="90" y="-10" width="25" height="20" fill="url(#copperGradient)" stroke="#8B4513" stroke-width="0.75" rx="2" ry="2" />
+      </g>
+    </g>
+    
+    <!-- Silver inner ring with Iron Man accents -->
+    <circle cx="0" cy="0" r="80" fill="url(#darkMetalGradient)" stroke="#8A0303" stroke-width="2" />
+    
+    <!-- Triangle elements with Iron Man color scheme -->
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0" to="-180" dur="85s" repeatCount="indefinite" additive="sum" />
+      
+      <!-- 8 triangular elements around the circle -->
+      <g transform="rotate(0)">
+        <path d="M0,0 L15,80 L-15,80 Z" fill="url(#enhancedSilverGradient)" stroke="#8A0303" stroke-width="1" />
+      </g>
+      <g transform="rotate(45)">
+        <path d="M0,0 L15,80 L-15,80 Z" fill="url(#enhancedSilverGradient)" stroke="#8A0303" stroke-width="1" />
+      </g>
+      <g transform="rotate(90)">
+        <path d="M0,0 L15,80 L-15,80 Z" fill="url(#enhancedSilverGradient)" stroke="#8A0303" stroke-width="1" />
+      </g>
+      <g transform="rotate(135)">
+        <path d="M0,0 L15,80 L-15,80 Z" fill="url(#enhancedSilverGradient)" stroke="#8A0303" stroke-width="1" />
+      </g>
+      <g transform="rotate(180)">
+        <path d="M0,0 L15,80 L-15,80 Z" fill="url(#enhancedSilverGradient)" stroke="#8A0303" stroke-width="1" />
+      </g>
+      <g transform="rotate(225)">
+        <path d="M0,0 L15,80 L-15,80 Z" fill="url(#enhancedSilverGradient)" stroke="#8A0303" stroke-width="1" />
+      </g>
+      <g transform="rotate(270)">
+        <path d="M0,0 L15,80 L-15,80 Z" fill="url(#enhancedSilverGradient)" stroke="#8A0303" stroke-width="1" />
+      </g>
+      <g transform="rotate(315)">
+        <path d="M0,0 L15,80 L-15,80 Z" fill="url(#enhancedSilverGradient)" stroke="#8A0303" stroke-width="1" />
+      </g>
+    </g>
+    
+    <!-- Central triangular element with Iron Man colors -->
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="55s" repeatCount="indefinite" />
+      <path d="M0,-65 L56,32 L-56,32 Z" fill="url(#enhancedSilverGradient)" stroke="#8A0303" stroke-width="1.5" />
+      
+      <!-- Small circles at the vertices of the triangle -->
+      <circle cx="0" cy="-55" r="6" fill="#FFFFFF" stroke="#8A0303" stroke-width="0.75" />
+      <circle cx="46" cy="22" r="6" fill="#FFFFFF" stroke="#8A0303" stroke-width="0.75" />
+      <circle cx="-46" cy="22" r="6" fill="#FFFFFF" stroke="#8A0303" stroke-width="0.75" />
+      
+      <!-- Central circle and connecting lines -->
+      <circle cx="0" cy="0" r="10" fill="#FFFFFF" stroke="#8A0303" stroke-width="0.75" />
+      <line x1="0" y1="0" x2="0" y2="-55" stroke="#FFFFFF" stroke-width="2.5" />
+      <line x1="0" y1="0" x2="46" y2="22" stroke="#FFFFFF" stroke-width="2.5" />
+      <line x1="0" y1="0" x2="-46" y2="22" stroke="#FFFFFF" stroke-width="2.5" />
+      
+      <!-- New ping ball with random movement inside the triangle -->
+      <circle cx="0" cy="-20" r="6" fill="url(#pingBallGradient)" filter="url(#pingBallGlow)">
+        <!-- Random X movement -->
+        <animate attributeName="cx" 
+                 values="0;10;-15;25;-20;15;-10;20;-25;5;0" 
+                 dur="8.3s" 
+                 repeatCount="indefinite" 
+                 calcMode="linear" />
+        <!-- Random Y movement -->
+        <animate attributeName="cy" 
+                 values="-20;-35;-15;-25;5;15;-5;10;-10;-30;-20" 
+                 dur="7.7s" 
+                 repeatCount="indefinite" 
+                 calcMode="linear" />
+        <!-- Subtle size pulsing -->
+        <animate attributeName="r" 
+                 values="6;7;6;5;6" 
+                 dur="3.5s" 
+                 repeatCount="indefinite" />
+      </circle>
+    </g>
+    
+    <!-- Metallic detailing with subtle rotation -->
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="170s" repeatCount="indefinite" additive="sum" />
+      
+      <!-- Realistic screws with enhanced detail -->
+      <g transform="rotate(45)">
+        <circle cx="90" cy="0" r="4" fill="url(#enhancedSilverGradient)" stroke="#777777" stroke-width="0.75" />
+        <path d="M90,0 M87,-2 L93,2 M87,2 L93,-2" stroke="#444444" stroke-width="0.75" />
+      </g>
+      <g transform="rotate(135)">
+        <circle cx="90" cy="0" r="4" fill="url(#enhancedSilverGradient)" stroke="#777777" stroke-width="0.75" />
+        <path d="M90,0 M87,-2 L93,2 M87,2 L93,-2" stroke="#444444" stroke-width="0.75" />
+      </g>
+      <g transform="rotate(225)">
+        <circle cx="90" cy="0" r="4" fill="url(#enhancedSilverGradient)" stroke="#777777" stroke-width="0.75" />
+        <path d="M90,0 M87,-2 L93,2 M87,2 L93,-2" stroke="#444444" stroke-width="0.75" />
+      </g>
+      <g transform="rotate(315)">
+        <circle cx="90" cy="0" r="4" fill="url(#enhancedSilverGradient)" stroke="#777777" stroke-width="0.75" />
+        <path d="M90,0 M87,-2 L93,2 M87,2 L93,-2" stroke="#444444" stroke-width="0.75" />
+      </g>
+    </g>
+    
+    <!-- Inner energy housing with pulse animation -->
+    <circle cx="0" cy="0" r="60" fill="url(#darkMetalGradient)" stroke="#40C4FF" stroke-width="1">
+      <animate attributeName="stroke-opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="0" cy="0" r="50" fill="#222222" stroke="#40C4FF" stroke-width="1" />
+    
+    <!-- Copper coil elements with enhanced pulsing -->
+    <g>
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="2.5s" repeatCount="indefinite" />
+      <path d="M-15,-38 L15,-38 L15,-35 L-15,-35 Z" fill="url(#copperGradient)" />
+      <path d="M38,-15 L38,15 L35,15 L35,-15 Z" fill="url(#copperGradient)" />
+      <path d="M-15,35 L15,35 L15,38 L-15,38 Z" fill="url(#copperGradient)" />
+      <path d="M-38,-15 L-38,15 L-35,15 L-35,-15 Z" fill="url(#copperGradient)" />
+    </g>
+    
+    <!-- Energy core circle with glowing triangle -->
+    <circle cx="0" cy="0" r="30" fill="#111111" stroke="#40C4FF" stroke-width="1" filter="url(#pulseGlow)">
+      <animate attributeName="stroke-width" values="1;1.5;1" dur="1.5s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Glowing triangle core with enhanced brightness -->
+    <g filter="url(#pulseGlow)">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="12s" repeatCount="indefinite" />
+      <path d="M0,-25 L21.7,12.5 L-21.7,12.5 Z" fill="url(#energyGlow)" stroke="#40C4FF" stroke-width="1">
+        <animate attributeName="stroke-opacity" values="0.8;1;0.8" dur="1.5s" repeatCount="indefinite" />
+      </path>
+    </g>
+    
+    <!-- Rotating inner mechanism with enhanced visibility -->
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="18s" repeatCount="indefinite" />
+      <path d="M0,-20 L0,20" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.9" />
+      <path d="M-20,0 L20,0" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.9" />
+      <path d="M-14,-14 L14,14" stroke="#FFFFFF" stroke-width="0.8" stroke-opacity="0.7" />
+      <path d="M-14,14 L14,-14" stroke="#FFFFFF" stroke-width="0.8" stroke-opacity="0.7" />
+    </g>
+    
+    <!-- Enhanced dynamic light reflections -->
+    <circle cx="-10" cy="-10" r="7" fill="url(#lightReflection)">
+      <animate attributeName="r" values="7;9;7" dur="3.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="3" cy="-12" r="5" fill="url(#lightReflection)">
+      <animate attributeName="r" values="5;6;5" dur="2.5s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Text elements - improved position and styling -->
+  <g transform="translate(400, 440)">
+    <!-- Main Logo Text with dramatic styling - ENLARGED -->
+    <text font-family="'Orbitron', 'Audiowide', sans-serif" font-size="86" font-weight="900" text-anchor="middle" fill="#111111" stroke="#000000" stroke-width="1" filter="url(#textShadow)" letter-spacing="4">
+      ARC 
+      <!-- Text reveal animation -->
+      <animate attributeName="opacity" from="0" to="1" dur="1.5s" begin="0.5s" fill="freeze" />
+    </text>
+    
+    <!-- Underline below ARC text -->
+    <line x1="-110" y1="15" x2="110" y2="15" stroke="#8A0303" stroke-width="6" stroke-linecap="round">
+      <animate attributeName="opacity" from="0" to="1" dur="1s" begin="1s" fill="freeze" />
+      <!-- Pulsing animation for the underline -->
+      <animate attributeName="stroke-opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" begin="2s" />
+    </line>
+    
+    <!-- Tagline with enhanced styling -->
+    <text font-family="'Rajdhani', 'Exo', sans-serif" font-size="28" font-weight="750" text-anchor="middle" y="45" fill="#8A0303" letter-spacing="3" filter="url(#subtleTextShadow)">
+      AI RESEARCH CURATOR
+      <animate attributeName="opacity" from="0" to="1" dur="1.5s" begin="1.5s" fill="freeze" />
+    </text>
+  </g>
+  
+  
+  <!-- NEW: Trail of three glowing light blue lights in a line -->
+  <g transform="translate(400, 485)">
+    <!-- Connecting line for the lights -->
+    <line x1="-70" y1="0" x2="70" y2="0" stroke="#40C4FF" stroke-width="2" stroke-opacity="0.5">
+      <animate attributeName="opacity" from="0" to="1" dur="1s" begin="2.5s" fill="freeze" />
+    </line>
+    
+    <!-- First Light -->
+    <circle cx="-60" cy="0" r="8" fill="url(#glowingLightGradient)" filter="url(#strongGlow)">
+      <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2.5s" fill="freeze" />
+      <!-- Pulsing animation for the light -->
+      <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite" begin="3s" />
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" begin="3s" />
+    </circle>
+    
+    <!-- Second Light -->
+    <circle cx="0" cy="0" r="8" fill="url(#glowingLightGradient)" filter="url(#strongGlow)">
+      <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="3s" fill="freeze" />
+      <!-- Pulsing animation for the light with offset -->
+      <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite" begin="3.5s" />
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" begin="3.5s" />
+    </circle>
+    
+    <!-- Third Light -->
+    <circle cx="60" cy="0" r="8" fill="url(#glowingLightGradient)" filter="url(#strongGlow)">
+      <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="3.5s" fill="freeze" />
+      <!-- Pulsing animation for the light with offset -->
+      <animate attributeName="r" values="8;10;8" dur
