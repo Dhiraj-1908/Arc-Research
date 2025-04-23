@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { Search } from "lucide-react";
 
 const formSchema = z.object({
   input: z.string().min(2, {
@@ -44,25 +45,28 @@ const UserInput = ({ isDarkMode = true }: UserInputProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full mt-6 flex flex-col md:flex-row items-start gap-3">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-4xl mx-auto mt-8 flex flex-col md:flex-row items-start gap-4">
         <FormField
           control={form.control}
           name="input"
           render={({ field }) => (
-            <FormItem className="w-full">
+            <FormItem className="w-full relative">
+              <div className="absolute left-5 top-4 text-gray-400">
+                <Search size={20} />
+              </div>
               <FormControl>
                 <Textarea 
                   placeholder="Enter your research topic" 
                   {...field} 
-                  className={`rounded-full w-full p-4 py-3 placeholder:text-sm min-h-12 resize-y ${
+                  className={`rounded-lg w-full p-6 pl-12 py-4 placeholder:text-base h-16 max-h-16 resize-none text-lg ${
                     isDarkMode 
-                      ? 'bg-gray-800 border-gray-700 text-white placeholder:text-gray-400' 
-                      : 'bg-white border-gray-200 text-gray-900 placeholder:text-gray-500'
-                  } border shadow-none transition-colors duration-100`}
+                      ? 'bg-gray-800 border-gray-700 text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-transparent' 
+                      : 'bg-white border-gray-200 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  } border shadow-lg transition-all duration-300 overflow-y-auto`}
                   rows={1}
                 />
               </FormControl>
-              <FormMessage className="text-red-500 text-xs mt-1" />
+              <FormMessage className="text-red-500 text-xs mt-2 ml-4" />
             </FormItem>
           )}
         />
@@ -72,9 +76,9 @@ const UserInput = ({ isDarkMode = true }: UserInputProps) => {
             isDarkMode
               ? 'bg-blue-600 hover:bg-blue-700' 
               : 'bg-blue-500 hover:bg-blue-600'
-          } text-white rounded-full px-6 py-2 transition-colors duration-300 mt-1`}
+          } text-white font-medium rounded-lg px-8 py-4 h-16 text-lg transition-all duration-300 shadow-lg hover:shadow-xl md:mt-0 mt-2`}
         >
-          Submit
+          Search
         </Button>
       </form>
     </Form>
