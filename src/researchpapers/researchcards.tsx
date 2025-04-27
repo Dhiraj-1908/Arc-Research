@@ -23,7 +23,7 @@ const ResearchCards: React.FC<ResearchCardsProps> = ({ isDarkMode }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeField, setActiveField] = useState<ResearchFieldType>("all");
   const [error, setError] = useState<string | null>(null);
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false); 
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState<string>("");
@@ -263,7 +263,7 @@ const ResearchCards: React.FC<ResearchCardsProps> = ({ isDarkMode }) => {
           {/* Modified mobile view - no scroll buttons */}
           <div className="block md:hidden">
             <div 
-              className="flex overflow-x-auto gap-4 py-2 px-2 scrollbar-hide snap-x snap-mandatory"
+              className="flex overflow-x-auto gap-2 py-2 px-2 scrollbar-hide snap-x snap-mandatory"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               ref={scrollContainerRef}
             >
