@@ -115,6 +115,116 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+
+/* Thin scrollbar styling */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 20px;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* Add this to your global.css file */
+
+/* Hide scrollbars but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+/* Fade overlay gradient effects */
+.fade-left-overlay {
+  background: linear-gradient(to right, 
+    rgba(0, 0, 0, 0.2) 0%, 
+    rgba(0, 0, 0, 0.1) 40%, 
+    rgba(0, 0, 0, 0) 100%
+  );
+  
+  /* Add the backdrop-filter for a more subtle effect */
+  backdrop-filter: blur(2px);
+}
+
+.fade-right-overlay {
+  background: linear-gradient(to left, 
+    rgba(0, 0, 0, 0.2) 0%, 
+    rgba(0, 0, 0, 0.1) 40%, 
+    rgba(0, 0, 0, 0) 100%
+  );
+  
+  /* Add the backdrop-filter for a more subtle effect */
+  backdrop-filter: blur(2px);
+}
+
+/* Progress animation for the scrolling indicator */
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-progress {
+  animation: progress 20s linear infinite;
+}
+
+/* Card scale animation when hovering */
+@media (hover: hover) {
+  .research-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    z-index: 10;
+  }
+}
+
+/* Mobile-friendly touch interactions */
+@media (max-width: 768px) {
+  .fade-left-overlay, .fade-right-overlay {
+    width: 16px; /* Narrower on mobile */
+  }
+}
+
+/* Dark mode adaptations for fade overlays */
+.dark .fade-left-overlay {
+  background: linear-gradient(to right, 
+    rgba(17, 24, 39, 0.4) 0%, 
+    rgba(17, 24, 39, 0.2) 40%, 
+    rgba(17, 24, 39, 0) 100%
+  );
+}
+
+.dark .fade-right-overlay {
+  background: linear-gradient(to left, 
+    rgba(17, 24, 39, 0.4) 0%, 
+    rgba(17, 24, 39, 0.2) 40%, 
+    rgba(17, 24, 39, 0) 100%
+  );
+}
+
+
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
