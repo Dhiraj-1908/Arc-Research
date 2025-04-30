@@ -13,7 +13,7 @@ interface DeepResearchState{
 interface DeepResearchActions{
     setTopic: (topic: string) => void,
     setQuestions: (questions: string[]) => void,
-    setAnswer: (answers: string[]) => void,
+    setAnswers: (answers: string[]) => void,
     setCurrentQuestion: (index: number) => void,
     setIsCompleted: (isCompleted: boolean) => void
     setIsLoading: (isLoading: boolean) => void
@@ -34,7 +34,7 @@ export const useDeepResearchStore = create<DeepResearchState & DeepResearchActio
     ...intialState,
     setTopic: (topic: string) => set({topic}),                 // set of methods to chnage state
     setQuestions: (questions: string[]) => set({questions}),
-    setAnswer: (answers: string[]) => set({answers}),
+    setAnswers: (answers: string[]) => set({answers}),
     setCurrentQuestion: (currentQuestion: number) => set({currentQuestion}),
     setIsCompleted: (isCompleted: boolean) => set({isCompleted}),
     setIsLoading: (isLoading: boolean) => set({isLoading}),

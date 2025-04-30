@@ -2,10 +2,10 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Sun, Moon, ChevronDown } from "lucide-react";
-import UserInput from "@/components/ui/Arc_componets/UserInput";
+import UserInput from "@/components/ui/deep-research/UserInput";
 import ResearchCards from "@/researchpapers/researchcards";
-import QuestionForm from "@/components/ui/Arc_componets/QuestionForm";
 import { useDeepResearchStore } from "@/store/deepResearch";
+import QnA from "@/components/ui/deep-research/QnA";
 
 export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -215,7 +215,7 @@ export default function Home() {
                       <UserInput isDarkMode={isDarkMode} />
                     ) : (
                       <div className="transition-all duration-500 ease-in-out">
-                        <QuestionForm />
+                        <QnA /> {/* Instead of QuestionForm */}
                       </div>
                     )}
                   </div>
@@ -223,21 +223,17 @@ export default function Home() {
               </div>
 
               {/* Repositioned scroll down indicator - always visible and not affected by QuestionForm */}
-              <div className="mt-5 flex justify-center lg:justify-start sticky bottom-8 z-20">
-                <button
-                  onClick={scrollToResearch}
-                  className={`flex flex-col items-center px-4 py-2 rounded-full ${
-                    isDarkMode ? "bg-gray-800/80" : "bg-white/80"
-                  } backdrop-blur-sm ${theme.shadow} ${theme.mutedText} hover:${
-                    theme.text
-                  } transition-all duration-300 group`}
-                >
-                  <span className="text-sm font-semibold">
-                    Explore Research Papers
-                  </span>
-                  <ChevronDown className="animate-bounce" size={18} />
-                </button>
-              </div>
+              <button
+                onClick={scrollToResearch}
+                className={`mt-12 mb-4 mx-auto flex items-center space-x-2 px-4 py-2 rounded-full ${
+                  isDarkMode ? "bg-gray-800/80" : "bg-white/80"
+                } ${theme.shadow} ${theme.text} transition-all duration-300`}
+              >
+                <span className="text-sm font-semibold">
+                  Explore Research Papers
+                </span>
+                <ChevronDown className="animate-bounce" size={18} />
+              </button>
             </div>
           </div>
         </div>

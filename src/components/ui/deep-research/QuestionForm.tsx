@@ -30,7 +30,7 @@ const QuestionForm = () => {
     currentQuestion, 
     answers, 
     setCurrentQuestion, 
-    setAnswer, 
+    setAnswers, 
     setIsCompleted, 
     isLoading 
   } = useDeepResearchStore();
@@ -46,13 +46,11 @@ const QuestionForm = () => {
     // Update answers in store
     const newAnswers = [...answers];
     newAnswers[currentQuestion] = values.answer;
-    setAnswer(newAnswers);
+    setAnswers(newAnswers);
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      form.reset({
-        answer: answers[currentQuestion + 1] || "" // Pre-populate with existing answer if any
-      });
+      form.reset();
     } else {
       setIsCompleted(true);
     }
@@ -97,13 +95,7 @@ const QuestionForm = () => {
                 variant="outline"
                 onClick={() => {
                   if (currentQuestion > 0) {
-                    // Save current answer before going back
-                    const newAnswers = [...answers];
-                    const currentAnswer = form.getValues("answer");
-                    if (currentAnswer) {
-                      newAnswers[currentQuestion] = currentAnswer;
-                      setAnswer(newAnswers);
-                    }
+                    
                     
                     // Go to previous question
                     setCurrentQuestion(currentQuestion - 1);
@@ -120,7 +112,7 @@ const QuestionForm = () => {
               </Button>
 
               <Button 
-                type="button"
+                type="submit"
                 onClick={form.handleSubmit(onSubmit)}
                 disabled={isLoading}
                 className="flex items-center gap-2"
