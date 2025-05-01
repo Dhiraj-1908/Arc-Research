@@ -7,9 +7,11 @@ const QnA = () => {
 
     const {questions, isCompleted, topic , answers  } = useDeepResearchStore();
 
-    const {append} = useChat({
+    const {append , data} = useChat({
       api: "/api/deep-research"
     });
+
+    console.log("Data: ", data)
 
     useEffect(() => {
       if(isCompleted && questions.length > 0){
