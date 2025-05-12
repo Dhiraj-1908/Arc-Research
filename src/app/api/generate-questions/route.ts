@@ -5,7 +5,7 @@ import { z } from "zod";
 
 
 const openrouter = createOpenRouter({
-    apiKey: process.env.GEMINI_API_KEY || "",                   //DEEPSEEK_API_KEY     //LLAMA_PAID_API_KEY
+    apiKey: process.env.NEW_KEY || "",                   //DEEPSEEK_API_KEY     //LLAMA_PAID_API_KEY
   });
 
 const clarifyResearchGoals = async (topic: string) => {
@@ -18,8 +18,8 @@ const clarifyResearchGoals = async (topic: string) => {
     - Any particular perspective or excluded sources
     `
     try{
-        const { object } = await generateObject({
-            model: openrouter("google/gemini-2.0-flash-exp:free"),                            //google/gemini-2.0-flash-exp:free    //meta-llama/llama-3.3-70b-instruct
+        const { object } = await generateObject({                                  //google/gemini-2.5-flash-preview   (cheaper)
+            model: openrouter("anthropic/claude-3-haiku"),                     //google/gemini-2.0-flash-001    //openai/gpt-4.1 //openai/gpt-4.1-mini(reliable)     //openai/gpt-4.1 (context) --paid
             prompt,
             schema: z.object({
                 questions: z.array(z.string())

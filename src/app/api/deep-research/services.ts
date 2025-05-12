@@ -4,5 +4,5 @@ import Exa from "exa-js"
 export const exa = new Exa(process.env.SEARCH_API_KEY || "");
 
 export const openrouter = createOpenRouter({
-    apiKey: process.env.GEMINI_API_KEY || "",
+    apiKey: process.env.NEW_KEY || "",
   });
