@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { callModel } from "./model-caller";
-import { EXTRACTION_SYSTEM_PROMPT, getExtractionPrompt, getPlanningPrompt, PLANNING_SYSTEM_PROMPT } from "./promts";
+import { ANALYSIS_SYSTEM_PROMPT, EXTRACTION_SYSTEM_PROMPT, getAnalysisPrompt, getExtractionPrompt, getPlanningPrompt, getReportPrompt, PLANNING_SYSTEM_PROMPT, REPORT_SYSTEM_PROMPT } from "./promts";
 import { exa } from "./services";
 import { ResearchFindings, ResearchState, SearchResult } from "./types";
 
 import { z } from "zod";
+import { combineFindings } from "./utils";
+import { MAX_CONTENT_CHARS, MAX_ITERATIONS, MAX_SEARCH_RESULTS, MODELS } from "./constants";
 
 export async function generateSearchQueries(researchState: ResearchState) {
 
     const result  = await callModel({
-        model: "anthropic/claude-3-haiku",
+        model: MODELS.PLANNING,
         prompt: getPlanningPrompt(researchState.topic, researchState.clarificationsText),
         system: PLANNING_SYSTEM_PROMPT,
         schema: z.object({
@@ -30,14 +32,14 @@ export async function search(
               query,
             {
               type: "keyword",
-              numResults: 1,
+              numResults: MAX_SEARCH_RESULTS,
               startPublishedDate: new Date(Date.now() - 365*24*60*60*1000).toISOString(),
               endPublishedDate: new Date().toISOString(),
               startCrawlDate: new Date(Date.now() - 365*24*60*60*1000).toISOString(),
               endCrawlDate:  new Date().toISOString(),
               excludeDomains: ["https://www.youtube.com"],
               text: {
-                maxCharacters: 25000
+                maxCharacters: MAX_CONTENT_CHARS
               }
             }
           )
@@ -68,7 +70,7 @@ export async function extractContent(
   
           const result = await callModel(
             {
-              model: "anthropic/claude-3-haiku",
+              model: MODELS.EXTRACTION,
               prompt: getExtractionPrompt(
                 content,
                 researchState.topic,
@@ -119,3 +121,102 @@ export async function extractContent(
     return newFindings;
   }
   
+ 
+  
+  export async function analyzeFindings(
+    researchState: ResearchState,
+    currentQueries: string[],
+    currentIteration: number,
+) {
+    try {
+        const contentText = combineFindings(researchState.findings);
+  
+        // Define the result type to avoid TypeScript errors
+        type AnalysisResult = {
+            sufficient: boolean;
+            gaps: string | string[];
+            queries: string[];
+        };
+        
+        const result = await callModel<AnalysisResult>(
+            {
+                model: MODELS.ANALYSIS,
+                prompt: getAnalysisPrompt(
+                    contentText,
+                    researchState.topic,
+                    researchState.clarificationsText,
+                    currentQueries,
+                    currentIteration,
+                    MAX_ITERATIONS,
+                    contentText.length
+                ),
+                system: ANALYSIS_SYSTEM_PROMPT,
+                schema: z.object({
+                    sufficient: z.boolean()
+                        .describe("Whether the collected content is sufficient for a useful report"),
+                    gaps: z.union([
+                        z.string().describe("Identified gaps in the content as a text description"),
+                        z.array(z.string()).describe("Identified gaps in the content as a list")
+                    ]),
+                    queries: z.array(z.string())
+                        .describe("Search queries for missing information. Max 3 queries."),
+                }),
+            },
+            researchState
+        );
+      
+        // Create a normalized copy of the result using a type assertion to ensure TypeScript knows it's an object
+        const normalizedResult: AnalysisResult = result as AnalysisResult;
+        
+        // Handle the gaps normalization
+        if (typeof normalizedResult.gaps === 'string') {
+            // Convert string into an array by splitting on bullet points or newlines
+            const gapsText = normalizedResult.gaps;
+            const gapsArray = gapsText
+                .split(/\n-|\r\n-/)  // Split on newline followed by dash (bullet points)
+                .map((item: string) => item.trim())
+                .filter((item: string) => item.length > 0);
+                
+            // Replace the string with the array
+            normalizedResult.gaps = gapsArray.length > 0 ? gapsArray : [gapsText];
+        }
+
+        return normalizedResult;
+    } catch (error) {
+        console.log("Error in analyzeFindings:", error);
+        // Return a default response to prevent the research process from breaking
+        return {
+            sufficient: false,
+            gaps: ["Error analyzing findings, continuing with research"],
+            queries: currentQueries.slice(0, 3) // Use the current queries as a fallback
+        };
+    }
+}
+  
+  export async function generateReport(researchState: ResearchState) {
+    try {
+     // activityTracker.add("generate","pending",`Geneating comprehensive report!`);
+  
+      const contentText = combineFindings(researchState.findings);
+  
+      const report = await callModel(
+        {
+          model: MODELS.REPORT,
+          prompt: getReportPrompt(
+            contentText,
+            researchState.topic,
+            researchState.clarificationsText
+          ),
+          system: REPORT_SYSTEM_PROMPT
+        },
+        researchState
+      );
+  
+     // activityTracker.add("generate","complete",`Generated comprehensive report, Total tokens used: ${researchState.tokenUsed}. Research completed in ${researchState.completedSteps} steps.`);
+  
+      return report;
+    } catch (error) {
+      console.log(error);
+     // return handleError(error, `Report Generation`, activityTracker, "generate", "Error generating report. Please try again. ")
+    }
+  }  

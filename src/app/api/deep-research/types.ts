@@ -20,7 +20,7 @@ export interface ModelCallOptions<T>{
     model: string;
     prompt: string;
     system: string;
-    schema: z.ZodType<T>;
+    schema?: z.ZodType<T>;
 }
 
 export interface SearchResult{
