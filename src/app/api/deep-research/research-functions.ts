@@ -2,13 +2,17 @@
 import { callModel } from "./model-caller";
 import { ANALYSIS_SYSTEM_PROMPT, EXTRACTION_SYSTEM_PROMPT, getAnalysisPrompt, getExtractionPrompt, getPlanningPrompt, getReportPrompt, PLANNING_SYSTEM_PROMPT, REPORT_SYSTEM_PROMPT } from "./promts";
 import { exa } from "./services";
-import { ResearchFindings, ResearchState, SearchResult } from "./types";
+import { ActivityTracker, ResearchFindings, ResearchState, SearchResult } from "./types";
 
 import { z } from "zod";
 import { combineFindings } from "./utils";
 import { MAX_CONTENT_CHARS, MAX_ITERATIONS, MAX_SEARCH_RESULTS, MODELS } from "./constants";
 
-export async function generateSearchQueries(researchState: ResearchState) {
+export async function generateSearchQueries(researchState: ResearchState, activityTracker: ActivityTracker) {
+
+
+    
+        activityTracker.add( "planning","pending","Planning the research");
 
     const result  = await callModel({
         model: MODELS.PLANNING,
@@ -18,15 +22,22 @@ export async function generateSearchQueries(researchState: ResearchState) {
             searchQueries: z.array(z.string().min(1))
               .length(3)
               .describe("Exactly 3 search queries for comprehensive research")
-        })
-    }, researchState)
+        }),
+       // activityType: "planning"
+    }, researchState);
+
+    activityTracker.add( "planning","complete","Crafted the research plan");
     return result;
 }
 
 export async function search(
     query: string,
-    ResearchState: ResearchState
+    ResearchState: ResearchState,
+    activityTracker: ActivityTracker
 ): Promise<SearchResult[]>{
+
+    activityTracker.add( "search","pending",`Searching for ${query}`);
+
     try{
         const searchResult = await exa.searchAndContents(
               query,
@@ -51,6 +62,7 @@ export async function search(
           }))
 
           ResearchState.completedSteps++;
+          activityTracker.add( "search","complete",`Found ${filteredResults.length} results for ${query}`);
 
           return filteredResults
           
@@ -65,9 +77,12 @@ export async function extractContent(
     content: string,
     url: string,
     researchState: ResearchState,
+    activityTracker: ActivityTracker
+
   ) {
   
-  
+    activityTracker.add( "extract","pending",`Extracting content from ${url}`);
+
           const result = await callModel(
             {
               model: MODELS.EXTRACTION,
@@ -83,6 +98,9 @@ export async function extractContent(
             },
             researchState
           );
+
+          activityTracker.add( "extract","complete",`Extracted content from ${url}`);
+
                 
           return {
             url,
@@ -93,11 +111,13 @@ export async function extractContent(
   export async function processSearchResults(
     searchResults: SearchResult[],
     researchState: ResearchState,
+    activityTracker: ActivityTracker
+
   ): Promise<ResearchFindings[]> {
 
 
     const extractionPromises = searchResults.map((result) =>
-      extractContent(result.content, result.url, researchState)
+      extractContent(result.content, result.url, researchState, activityTracker)
     );
 
     const extractionResults = await Promise.allSettled(extractionPromises);
@@ -127,8 +147,12 @@ export async function extractContent(
     researchState: ResearchState,
     currentQueries: string[],
     currentIteration: number,
+    activityTracker: ActivityTracker
+
 ) {
     try {
+        activityTracker.add( "analyze","pending",`Analyzing research findings (iteration ${currentIteration}) of ${MAX_ITERATIONS}`);
+
         const contentText = combineFindings(researchState.findings);
   
         // Define the result type to avoid TypeScript errors
@@ -180,6 +204,9 @@ export async function extractContent(
             // Replace the string with the array
             normalizedResult.gaps = gapsArray.length > 0 ? gapsArray : [gapsText];
         }
+        
+        const isContentSufficient = typeof result !== 'string' && result.sufficient
+        activityTracker.add("analyze", "complete", `Analyzed the collected research findings: ${isContentSufficient ? 'content is sufficient' : 'More research is needed!'}`);
 
         return normalizedResult;
     } catch (error) {
@@ -193,9 +220,12 @@ export async function extractContent(
     }
 }
   
-  export async function generateReport(researchState: ResearchState) {
+  export async function generateReport(
+    researchState: ResearchState, 
+    activityTracker: ActivityTracker
+  ) {
     try {
-     // activityTracker.add("generate","pending",`Geneating comprehensive report!`);
+      activityTracker.add("generate","pending",`Geneating comprehensive report!`);
   
       const contentText = combineFindings(researchState.findings);
   
@@ -212,7 +242,7 @@ export async function extractContent(
         researchState
       );
   
-     // activityTracker.add("generate","complete",`Generated comprehensive report, Total tokens used: ${researchState.tokenUsed}. Research completed in ${researchState.completedSteps} steps.`);
+      activityTracker.add("generate","complete",`Generated comprehensive report, Total tokens used: ${researchState.tokenUsed}. Research completed in ${researchState.completedSteps} steps.`);
   
       return report;
     } catch (error) {
