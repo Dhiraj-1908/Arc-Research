@@ -1,6 +1,6 @@
 "use client";
 import { useDeepResearchStore } from "@/store/deepResearch";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -13,13 +13,26 @@ import { format } from "date-fns";
 import Link from "next/link";
 
 const ResearchActivities = () => {
-  const { activities, sources } = useDeepResearchStore();
+  const { activities, sources, isLoading } = useDeepResearchStore();
   const [isOpen, setIsOpen] = useState(true);
+  
+  // Set position based on whether we're in research phase
+  const [position, setPosition] = useState("fixed");
+  
+  useEffect(() => {
+    // If we have started research and report isn't generated yet,
+    // we want the activities panel to be positioned differently
+    if (isLoading) {
+      setPosition("relative");
+    } else {
+      setPosition("fixed");
+    }
+  }, [isLoading]);
 
-  if (activities.length === 0) return;
+  if (activities.length === 0) return null;
 
   return (
-    <div className="w-[90vw] sm:w-[400px] fixed top-4 right-4 z-20">
+    <div className={`w-[90vw] sm:w-[400px] ${position === "fixed" ? "fixed top-4 right-4 z-20" : "relative mx-auto mb-8"}`}>
       <Collapsible className="w-full" open={isOpen} onOpenChange={setIsOpen}>
         <div className="flex justify-end mb-2">
           <CollapsibleTrigger asChild>
@@ -46,7 +59,7 @@ const ResearchActivities = () => {
             </TabsList>
             <TabsContent
               value="activities"
-              className="h-[calc(100%-60px)] overflow-y-auto border-black/10 border-solid shadow-none bg-white/60 backdrop-blur-sm border rounded-xl "
+              className="h-[calc(100%-60px)] overflow-y-auto border-black/10 border-solid shadow-none bg-white/60 backdrop-blur-sm border rounded-xl"
             >
               <ul className="space-y-4 p-4">
                 {activities.map((activity, index) => (
@@ -57,14 +70,14 @@ const ResearchActivities = () => {
                     <div className="flex items-center gap-2">
                       <span
                         className={`
-               ${
-                 activity.status === "complete"
-                   ? "bg-green-500"
-                   : activity.status === "error"
-                   ? "bg-red-500"
-                   : "bg-yellow-500"
-               } min-w-2 min-h-2 h-2 block rounded-full
-              `}
+                          ${
+                            activity.status === "complete"
+                              ? "bg-green-500"
+                              : activity.status === "error"
+                              ? "bg-red-500"
+                              : "bg-yellow-500"
+                          } min-w-2 min-h-2 h-2 block rounded-full
+                        `}
                       >
                         &nbsp;
                       </span>

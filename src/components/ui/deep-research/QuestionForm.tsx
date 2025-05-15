@@ -1,4 +1,6 @@
-import React from 'react';
+"use client";
+
+import React, { useState, useEffect } from 'react';
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,12 +21,14 @@ import {
 } from "@/components/ui/card";
 import { useDeepResearchStore } from '@/store/deepResearch';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   answer: z.string().min(1, "Answer is required!"),
 });
 
 const QuestionForm = () => {
+  const router = useRouter();
   const { 
     questions, 
     currentQuestion, 
@@ -32,15 +36,34 @@ const QuestionForm = () => {
     setCurrentQuestion, 
     setAnswers, 
     setIsCompleted, 
-    isLoading 
+    isLoading, 
   } = useDeepResearchStore();
-
+  
+  // State for client-side rendering safety
+  const [hasMounted, setHasMounted] = useState(false);
+  
+  // Set mounted state after hydration
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       answer: answers[currentQuestion] || "",
     },
   });
+  
+  // Update form value when currentQuestion changes
+  useEffect(() => {
+    if (!hasMounted) return;
+    
+    if (answers[currentQuestion]) {
+      form.setValue("answer", answers[currentQuestion]);
+    } else {
+      form.setValue("answer", "");
+    }
+  }, [currentQuestion, answers, form, hasMounted]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Update answers in store
@@ -50,14 +73,17 @@ const QuestionForm = () => {
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      form.reset();
     } else {
+      // This is the key part - only set isCompleted to true
+      // when the user submits the final question
       setIsCompleted(true);
+      // Navigate to research page
+      router.push('/research');
     }
   }
 
-  // Handle case where there are no questions yet
-  if (!questions || questions.length === 0) {
+  // Handle case where there are no questions yet or component is not mounted
+  if (!hasMounted || !questions || questions.length === 0) {
     return null;
   }
 
@@ -95,13 +121,16 @@ const QuestionForm = () => {
                 variant="outline"
                 onClick={() => {
                   if (currentQuestion > 0) {
-                    
+                    // Save current answer before navigating
+                    const currentAnswer = form.getValues().answer;
+                    if (currentAnswer) {
+                      const newAnswers = [...answers];
+                      newAnswers[currentQuestion] = currentAnswer;
+                      setAnswers(newAnswers);
+                    }
                     
                     // Go to previous question
                     setCurrentQuestion(currentQuestion - 1);
-                    
-                    // Set form value to previous answer
-                    form.setValue("answer", answers[currentQuestion - 1] || "");
                   }
                 }}
                 disabled={currentQuestion === 0 || isLoading}
@@ -113,7 +142,6 @@ const QuestionForm = () => {
 
               <Button 
                 type="submit"
-                onClick={form.handleSubmit(onSubmit)}
                 disabled={isLoading}
                 className="flex items-center gap-2"
               >
