@@ -23,11 +23,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden">
+      <head>
+        {/* More restrictive viewport meta tag to prevent zooming and horizontal scrolling */}
+        <meta 
+          name="viewport" 
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" 
+        />
+      </head>
       <body
-        className={`${inter.variable} ${dancingScript.variable} font-inter antialiased`}
+        className={`${inter.variable} ${dancingScript.variable} font-inter antialiased overflow-x-hidden w-full`}
       >
-        {children}
+        <div className="max-w-[100vw] overflow-x-hidden">
+          {children}
+        </div>
       </body>
     </html>
   );

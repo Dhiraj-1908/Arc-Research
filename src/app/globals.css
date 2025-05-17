@@ -5,6 +5,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+
 @theme inline {
   --font-dancing-script: var(--font-dancing-script);
   --font-inter: var(--font-inter);
@@ -235,3 +237,6 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
