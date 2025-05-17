@@ -1,6 +1,6 @@
-"use client";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import { useDeepResearchStore } from '@/store/deepResearch';
 import React, { useEffect, useState } from 'react';
 import { useChat } from '@ai-sdk/react';
@@ -17,7 +17,6 @@ const ResearchPage = () => {
     setActivities,
     setSources,
     setReport,
-    isLoading,
     isCompleted
   } = useDeepResearchStore();
   
@@ -89,8 +88,8 @@ const ResearchPage = () => {
       : "";
     setReport(report);
 
-    setIsLoading(isLoading);
-  }, [data, setActivities, setSources, setReport, setIsLoading, isLoading, hasMounted]);
+    setIsLoading(!report.length);
+  }, [data, setActivities, setSources, setReport, setIsLoading, hasMounted]);
 
   useEffect(() => {
     if (!hasMounted) return; // Skip until we've mounted
