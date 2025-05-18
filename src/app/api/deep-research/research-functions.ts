@@ -5,13 +5,13 @@ import { exa } from "./services";
 import { ActivityTracker, ResearchFindings, ResearchState, SearchResult } from "./types";
 
 import { z } from "zod";
-import { combineFindings } from "./utils";
+import { combineFindings, handleError } from "./utils";
 import { MAX_CONTENT_CHARS, MAX_ITERATIONS, MAX_SEARCH_RESULTS, MODELS } from "./constants";
 
 export async function generateSearchQueries(researchState: ResearchState, activityTracker: ActivityTracker) {
 
 
-    
+    try{
         activityTracker.add( "planning","pending","Planning the research");
 
     const result  = await callModel({
@@ -23,11 +23,17 @@ export async function generateSearchQueries(researchState: ResearchState, activi
               .length(3)
               .describe("Exactly 3 search queries for comprehensive research")
         }),
-       // activityType: "planning"
-    }, researchState);
+        activityType: "planning"
+    }, researchState, activityTracker);
 
     activityTracker.add( "planning","complete","Crafted the research plan");
     return result;
+  } catch(error){
+    return handleError(error, `Research planning`, activityTracker, "planning", {
+      searchQueries: [`${researchState.topic} best practices`,`${researchState.topic} guidelines`, `${researchState.topic} examples`  ]
+  })
+  
+  }
 }
 
 export async function search(
@@ -68,7 +74,8 @@ export async function search(
           
 
     }catch(error){
-           console.log("error: ", error)
+           console.log("error: ", error);
+           return handleError(error, `Searching for ${query}`, activityTracker, "search", []) || []
     }
 }
 
@@ -80,6 +87,8 @@ export async function extractContent(
     activityTracker: ActivityTracker
 
   ) {
+
+    try{
   
     activityTracker.add( "extract","pending",`Extracting content from ${url}`);
 
@@ -95,8 +104,9 @@ export async function extractContent(
               schema: z.object({
                 summary: z.string().describe("A comprehensive summary of the content"),
               }),
+              activityType: "extract"
             },
-            researchState
+            researchState, activityTracker
           );
 
           activityTracker.add( "extract","complete",`Extracted content from ${url}`);
@@ -106,6 +116,9 @@ export async function extractContent(
             url,
             summary: (result as any).summary,
           };
+        } catch(error){
+          return handleError(error, `Content extraction from ${url}`, activityTracker, "extract", null) || null
+      }
   }
   
   export async function processSearchResults(
@@ -185,8 +198,9 @@ export async function extractContent(
                     queries: z.array(z.string())
                         .describe("Search queries for missing information. Max 3 queries."),
                 }),
+                activityType: "analyze"
             },
-            researchState
+            researchState , activityTracker
         );
       
         // Create a normalized copy of the result using a type assertion to ensure TypeScript knows it's an object
@@ -215,7 +229,6 @@ export async function extractContent(
         return {
             sufficient: false,
             gaps: ["Error analyzing findings, continuing with research"],
-            queries: currentQueries.slice(0, 3) // Use the current queries as a fallback
         };
     }
 }
@@ -237,9 +250,10 @@ export async function extractContent(
             researchState.topic,
             researchState.clarificationsText
           ),
-          system: REPORT_SYSTEM_PROMPT
+          system: REPORT_SYSTEM_PROMPT,
+          activityType: "generate"
         },
-        researchState
+        researchState, activityTracker
       );
   
       activityTracker.add("generate","complete",`Generated comprehensive report, Total tokens used: ${researchState.tokenUsed}. Research completed in ${researchState.completedSteps} steps.`);
@@ -247,6 +261,6 @@ export async function extractContent(
       return report;
     } catch (error) {
       console.log(error);
-     // return handleError(error, `Report Generation`, activityTracker, "generate", "Error generating report. Please try again. ")
+     return handleError(error, `Report Generation`, activityTracker, "generate", "Error generating report. Please try again. ")
     }
   }  
