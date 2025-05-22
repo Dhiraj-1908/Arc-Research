@@ -6,7 +6,8 @@ import {
   DrawerContent,
   DrawerTrigger,
   DrawerTitle,  // Import DrawerTitle
-  DrawerHeader,  // Import DrawerHeader for proper structure
+  DrawerHeader,
+  DrawerDescription,  // Import DrawerHeader for proper structure
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { 
@@ -212,6 +213,7 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
           {/* Add the required DrawerHeader and DrawerTitle for accessibility */}
           <DrawerHeader className="sr-only">
             <DrawerTitle>Research Progress</DrawerTitle>
+            <DrawerDescription>View research activities and sources</DrawerDescription>
           </DrawerHeader>
           <div className="p-4 h-full">
             {content}
