@@ -19,6 +19,7 @@ import {
   FileText,
   FileCode,
   FileImage,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { motion } from "framer-motion";
+import { EnhancedPdfGenerationService } from "../download/pdfdownloader";
 
 type CodeProps = ComponentPropsWithRef<"code"> & {
   inline?: boolean;
@@ -40,6 +42,8 @@ interface ResearchReportProps {
 const ResearchReport = ({ isDarkMode }: ResearchReportProps) => {
   const { report, isCompleted, topic } = useDeepResearchStore();
   const [copied, setCopied] = useState(false);
+  const [pdfGenerating, setPdfGenerating] = useState(false);
+  const reportRef = React.useRef<HTMLDivElement>(null);
 
   // Theme colors based on light/dark mode
   const theme = {
@@ -51,7 +55,7 @@ const ResearchReport = ({ isDarkMode }: ResearchReportProps) => {
       ? "bg-blue-600 hover:bg-blue-700"
       : "bg-blue-500 hover:bg-blue-600",
     buttonOutline: isDarkMode
-      ? "border-gray-600 hover:bg-gray-700"
+      ? "border-gray-600 hover:bg-gray-700 hover:text-white text-gray-900"
       : "border-gray-300 hover:bg-gray-100",
     buttonText: "text-white",
     buttonIcon: isDarkMode ? "text-gray-300" : "text-gray-600",
@@ -67,6 +71,12 @@ const ResearchReport = ({ isDarkMode }: ResearchReportProps) => {
       ? "bg-gray-800 border-gray-700"
       : "bg-white border-gray-200",
     dropdownHover: isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100",
+    dropdownText: isDarkMode ? "text-white" : "text-gray-800",
+    dropdownActive: isDarkMode ? "text-black bg-blue-300" : "hover:bg-gray-100",
+    dropdownInactive: isDarkMode ? "text-blue-300" : "text-gray-600",
+    copyButton: isDarkMode 
+      ? "bg-gray-700 text-gray-900 hover:bg-gray-600 hover:text-white"
+      : "bg-white text-gray-600 hover:bg-gray-100",
   };
 
   const handleMarkdownDownload = () => {
@@ -99,13 +109,25 @@ const ResearchReport = ({ isDarkMode }: ResearchReportProps) => {
     URL.revokeObjectURL(url);
   };
 
-  // Mock PDF download since we don't have PDF generation in the browser
-  // In a real app, you'd use a library like jsPDF or send to backend
-  const handlePdfDownload = () => {
-    alert(
-      "PDF generation would be implemented with a PDF library like jsPDF or through a backend service."
-    );
-    // Placeholder for actual implementation
+  // Simplified PDF generation using the external service
+  const handlePdfDownload = async () => {
+    if (!topic || !report) return;
+    
+    try {
+      setPdfGenerating(true);
+      
+      // Extract markdown content
+      const content = report.split("<report>")[1].split("</report>")[0];
+      
+      // Use the enhanced PDF generation service with dark mode matching the UI
+      await EnhancedPdfGenerationService.downloadPdf(topic, content, isDarkMode);
+      
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+      alert("Failed to generate PDF. Please try again.");
+    } finally {
+      setPdfGenerating(false);
+    }
   };
 
   const handleCopyToClipboard = () => {
@@ -144,7 +166,7 @@ const ResearchReport = ({ isDarkMode }: ResearchReportProps) => {
             <Button
               size="sm"
               variant="outline"
-              className={`flex items-center gap-2 rounded border ${theme.buttonOutline} ${theme.text}`}
+              className={`flex items-center gap-2 rounded border ${theme.buttonOutline}`}
               onClick={handleCopyToClipboard}
             >
               {copied ? (
@@ -171,25 +193,35 @@ const ResearchReport = ({ isDarkMode }: ResearchReportProps) => {
                 className={`${theme.dropdown} border ${theme.shadow}`}
               >
                 <DropdownMenuItem
-                  className={`flex items-center gap-2 ${theme.dropdownHover} cursor-pointer`}
+                  className={`flex items-center gap-2 ${theme.dropdownText} ${theme.dropdownHover} cursor-pointer`}
                   onClick={handleMarkdownDownload}
                 >
-                  <FileText className="w-4 h-4" />
+                  <FileText className={`w-4 h-4 ${theme.dropdownInactive}`} />
                   <span>Markdown (.md)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className={`flex items-center gap-2 ${theme.dropdownHover} cursor-pointer`}
+                  className={`flex items-center gap-2 ${theme.dropdownText} ${theme.dropdownHover} cursor-pointer`}
                   onClick={handleTextDownload}
                 >
-                  <FileCode className="w-4 h-4" />
+                  <FileCode className={`w-4 h-4 ${theme.dropdownInactive}`} />
                   <span>Plain Text (.txt)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className={`flex items-center gap-2 ${theme.dropdownHover} cursor-pointer`}
+                  className={`flex items-center gap-2 ${theme.dropdownText} ${theme.dropdownHover} cursor-pointer`}
                   onClick={handlePdfDownload}
+                  disabled={pdfGenerating}
                 >
-                  <FileImage className="w-4 h-4" />
-                  <span>PDF Document (.pdf)</span>
+                  <FileImage className={`w-4 h-4 ${theme.dropdownInactive}`} />
+                  <span>
+                    {pdfGenerating ? (
+                      <span className="flex items-center">
+                        <Loader2 className="w-3 h-3 mr-2 animate-spin" />
+                        Generating PDF...
+                      </span>
+                    ) : (
+                      "PDF Document (.pdf)"
+                    )}
+                  </span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -197,6 +229,7 @@ const ResearchReport = ({ isDarkMode }: ResearchReportProps) => {
         </div>
 
         <div
+          ref={reportRef}
           className={`prose ${theme.prose} prose-sm md:prose-base max-w-none prose-headings:${theme.accent} prose-a:${theme.accent} prose-pre:${theme.codeBlockBg} overflow-x-auto p-6 md:p-8`}
         >
           <Markdown
@@ -229,7 +262,7 @@ const ResearchReport = ({ isDarkMode }: ResearchReportProps) => {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className={`absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity ${theme.copyButton}`}
                         onClick={() => {
                           navigator.clipboard.writeText(String(children));
                         }}
