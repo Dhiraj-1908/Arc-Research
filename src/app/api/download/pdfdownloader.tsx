@@ -1,88 +1,43 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 
-// Register custom fonts
-
-// Define theme types
-interface ThemeColors {
-  primary: string;
-  background: string;
-  card: string;
-  text: {
-    primary: string;
-    secondary: string;
-    muted: string;
-  };
-  border: string;
-  codeBackground: string;
-  blockquoteBackground: string;
-  blockquoteBorder: string;
-  headings: string;
-}
-
-interface Theme {
-  colors: ThemeColors;
-}
-
-// Custom theme colors for light mode and dark mode
-const createTheme = (isDarkMode = false): Theme => ({
-  colors: {
-    primary: isDarkMode ? '#3b82f6' : '#2563eb',
-    background: isDarkMode ? '#1f2937' : '#ffffff',
-    card: isDarkMode ? '#374151' : '#f9fafb',
-    text: {
-      primary: isDarkMode ? '#f3f4f6' : '#111827',
-      secondary: isDarkMode ? '#d1d5db' : '#4b5563',
-      muted: isDarkMode ? '#9ca3af' : '#6b7280',
-    },
-    border: isDarkMode ? '#4b5563' : '#e5e7eb',
-    codeBackground: isDarkMode ? '#111827' : '#f3f4f6',
-    blockquoteBackground: isDarkMode ? '#374151' : '#f3f4f6',
-    blockquoteBorder: isDarkMode ? '#60a5fa' : '#3b82f6',
-    headings: isDarkMode ? '#60a5fa' : '#2563eb',
-  }
-});
-
-// Create PDF styles
-const createPdfStyles = (isDarkMode = false) => {
-  const theme = createTheme(isDarkMode);
-  
+// Create PDF styles - Fixed version to prevent layout errors
+const createPdfStyles = () => {
   return StyleSheet.create({
     page: {
       padding: 50,
-      backgroundColor: theme.colors.background,
+      backgroundColor: '#ffffff',
       fontFamily: 'Helvetica',
       fontSize: 11,
       lineHeight: 1.6,
-      color: theme.colors.text.primary,
+      color: '#111827',
     },
     
-    // Header styles
+    // Header styles - Fixed flexDirection and positioning
     header: {
       marginBottom: 25,
       paddingBottom: 15,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      borderBottomColor: '#e5e7eb',
+      // Removed flexDirection: 'row' and justifyContent/alignItems that can cause issues
     },
     
     headerContent: {
-      flexDirection: 'column',
+      // Simplified header content without flex positioning
     },
     
     title: {
       fontSize: 24,
       fontWeight: 'bold',
-      color: theme.colors.headings,
+      color: '#2563eb',
       marginBottom: 5,
-      fontFamily: 'Helvetica',
+      lineHeight: 1,
+      fontFamily: 'Helvetica-Bold', // Use specific font variant
     },
     
     subtitle: {
       fontSize: 14,
-      color: theme.colors.text.secondary,
+      color: '#4b5563',
       fontFamily: 'Helvetica',
     },
     
@@ -91,62 +46,68 @@ const createPdfStyles = (isDarkMode = false) => {
       marginVertical: 14,
     },
     
-    // Typography
+    // Typography - Fixed margin values
     h1: {
       fontSize: 24,
       fontWeight: 'bold',
-      color: theme.colors.headings,
+      color: '#2563eb',
       marginTop: 20,
       marginBottom: 16,
       paddingBottom: 8,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
-      fontFamily: 'Helvetica',
+      borderBottomColor: '#e5e7eb',
+      fontFamily: 'Helvetica-Bold',
+      lineHeight: 1.2,
     },
     
     h2: {
       fontSize: 20,
       fontWeight: 'bold',
-      color: theme.colors.headings,
+      color: '#2563eb',
       marginTop: 18,
       marginBottom: 14,
-      fontFamily: 'Helvetica',
+      fontFamily: 'Helvetica-Bold',
+      lineHeight: 1.2,
     },
     
     h3: {
       fontSize: 16,
       fontWeight: 'bold',
-      color: theme.colors.headings,
+      color: '#2563eb',
       marginTop: 16,
       marginBottom: 12,
-      fontFamily: 'Helvetica',
+      fontFamily: 'Helvetica-Bold',
+      lineHeight: 1.2,
     },
     
     h4: {
       fontSize: 14,
       fontWeight: 'bold',
-      color: theme.colors.headings,
+      color: '#2563eb',
       marginTop: 14,
       marginBottom: 10,
-      fontFamily: 'Helvetica',
+      fontFamily: 'Helvetica-Bold',
+      lineHeight: 1.2,
     },
     
     h5: {
       fontSize: 12,
       fontWeight: 'bold',
-      color: theme.colors.headings,
+      color: '#2563eb',
       marginTop: 12,
       marginBottom: 8,
-      fontFamily: 'Helvetica',
+      fontFamily: 'Helvetica-Bold',
+      lineHeight: 1.2,
     },
     
     h6: {
       fontSize: 11,
       fontWeight: 'bold',
-      color: theme.colors.headings,
+      color: '#2563eb',
       marginTop: 12,
       marginBottom: 6,
-      fontFamily: 'Helvetica',
+      fontFamily: 'Helvetica-Bold',
+      lineHeight: 1.2,
     },
     
     paragraph: {
@@ -154,54 +115,54 @@ const createPdfStyles = (isDarkMode = false) => {
       marginBottom: 12,
       lineHeight: 1.6,
       fontFamily: 'Helvetica',
+      color: '#111827',
     },
     
     // Code styles
     codeBlock: {
       marginVertical: 12,
       padding: 12,
-      backgroundColor: theme.colors.codeBackground,
-      borderRadius: 6,
+      backgroundColor: '#f3f4f6',
+      // Removed borderRadius as it can cause issues in some cases
     },
     
     codeContent: {
       fontFamily: 'Courier',
       fontSize: 9,
-      color: theme.colors.text.primary,
+      color: '#111827',
       lineHeight: 1.4,
     },
     
     inlineCode: {
       fontFamily: 'Courier',
       fontSize: 10,
-      backgroundColor: theme.colors.codeBackground,
-      padding: 2,
-      borderRadius: 3,
+      backgroundColor: '#f3f4f6',
+      paddingHorizontal: 4,
+      paddingVertical: 2,
     },
     
-    // List styles
+    // List styles - Simplified to prevent flex issues
     listContainer: {
       marginVertical: 12,
-      paddingLeft: 8,
+      paddingLeft: 20, // Fixed padding value
     },
     
     listItem: {
-      flexDirection: 'row',
-      marginBottom: 8,
-    },
-    
-    listBullet: {
-      width: 15,
-      fontSize: 11,
-      color: theme.colors.headings,
-      marginRight: 5,
+      marginBottom: 6, // Simplified margin
     },
     
     listItemText: {
-      flex: 1,
       fontSize: 11,
       lineHeight: 1.6,
       fontFamily: 'Helvetica',
+      color: '#111827',
+    },
+    
+    // Bold text style
+    boldText: {
+      fontWeight: 'bold',
+      fontFamily: 'Helvetica-Bold',
+      color: '#111827',
     },
     
     // Quote styles
@@ -209,92 +170,93 @@ const createPdfStyles = (isDarkMode = false) => {
       marginVertical: 12,
       paddingVertical: 8,
       paddingHorizontal: 14,
-      backgroundColor: theme.colors.blockquoteBackground,
+      backgroundColor: '#f3f4f6',
       borderLeftWidth: 4,
-      borderLeftColor: theme.colors.blockquoteBorder,
-      borderRadius: 4,
+      borderLeftColor: '#3b82f6',
     },
     
     blockquoteText: {
       fontSize: 11,
       fontStyle: 'italic',
-      color: theme.colors.text.secondary,
+      color: '#4b5563',
       lineHeight: 1.6,
-      fontFamily: 'Helvetica',
+      fontFamily: 'Helvetica-Oblique',
     },
     
-    // Table styles
+    // Table styles - Simplified to prevent layout issues
     table: {
       marginVertical: 14,
       borderWidth: 1,
-      borderColor: theme.colors.border,
+      borderColor: '#e5e7eb',
     },
     
     tableRow: {
-      flexDirection: 'row',
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
+      borderBottomColor: '#e5e7eb',
+      minHeight: 30, // Ensure minimum height
     },
     
     tableHeader: {
-      backgroundColor: theme.colors.card,
+      backgroundColor: '#f9fafb',
     },
     
     tableCell: {
       padding: 8,
       fontSize: 10,
-      color: theme.colors.text.primary,
+      color: '#111827',
       fontFamily: 'Helvetica',
-      flex: 1,
+      minWidth: 50, // Ensure minimum width
     },
     
     tableCellHeader: {
       padding: 8,
       fontSize: 10,
       fontWeight: 'bold',
-      backgroundColor: theme.colors.card,
-      color: theme.colors.text.primary,
-      fontFamily: 'Helvetica',
-      flex: 1,
+      backgroundColor: '#f9fafb',
+      color: '#111827',
+      fontFamily: 'Helvetica-Bold',
+      minWidth: 50,
     },
     
     // Image styles
     image: {
       marginVertical: 12,
+      maxWidth: 500, // Prevent images from being too large
+      maxHeight: 400,
     },
     
     // Divider styles
     divider: {
       marginVertical: 12,
       height: 1,
-      backgroundColor: theme.colors.border,
+      backgroundColor: '#e5e7eb',
     },
     
-    // Footer styles
+    // Footer styles - Fixed positioning issues
     footer: {
-      position: 'absolute',
-      bottom: 30,
-      left: 50,
-      right: 50,
+      marginTop: 30,
       paddingTop: 10,
       borderTopWidth: 1,
-      borderTopColor: theme.colors.border,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    
-    footerText: {
+      borderTopColor: '#e5e7eb',
       fontSize: 8,
-      color: theme.colors.text.muted,
-      fontFamily: 'Helvetica'
+      color: '#6b7280',
+      textAlign: 'center', // Simplified footer layout
     },
-    
-    pageNumber: {
-      fontSize: 8,
-      color: theme.colors.text.muted,
-      fontFamily: 'Helvetica',
-    },
+  });
+};
+
+// Function to render formatted text with bold support
+const renderFormattedText = (text: string, styles: ReturnType<typeof createPdfStyles>) => {
+  if (!text) return '';
+  
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  
+  return parts.map((part: string, index: number) => {
+    if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+      const boldText = part.slice(2, -2);
+      return <Text key={index} style={styles.boldText}>{boldText}</Text>;
+    }
+    return part || '';
   });
 };
 
@@ -315,11 +277,11 @@ interface ContentItem {
 }
 
 interface ContentRendererProps {
-    item: ContentItem;
-    styles: ReturnType<typeof createPdfStyles>;
-  }
+  item: ContentItem;
+  styles: ReturnType<typeof createPdfStyles>;
+}
 
-// Content renderer component
+// Content renderer component - Fixed to prevent layout issues
 const ContentRenderer: React.FC<ContentRendererProps> = ({ item, styles }) => {
   switch (item.type) {
     case 'h1':
@@ -328,22 +290,32 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ item, styles }) => {
     case 'h4':
     case 'h5':
     case 'h6':
-      return <Text style={styles[item.type]}>{item.content}</Text>;
+      return (
+        <Text style={styles[item.type as keyof typeof styles]}>
+          {renderFormattedText(item.content || '', styles)}
+        </Text>
+      );
       
     case 'paragraph':
-      return <Text style={styles.paragraph}>{item.content}</Text>;
+      return (
+        <Text style={styles.paragraph}>
+          {renderFormattedText(item.content || '', styles)}
+        </Text>
+      );
       
     case 'code':
       return (
         <View style={styles.codeBlock}>
-          <Text style={styles.codeContent}>{item.content}</Text>
+          <Text style={styles.codeContent}>{item.content || ''}</Text>
         </View>
       );
       
     case 'blockquote':
       return (
         <View style={styles.blockquote}>
-          <Text style={styles.blockquoteText}>{item.content}</Text>
+          <Text style={styles.blockquoteText}>
+            {renderFormattedText(item.content || '', styles)}
+          </Text>
         </View>
       );
       
@@ -352,8 +324,9 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ item, styles }) => {
         <View style={styles.listContainer}>
           {item.items?.map((listItem: string, i: number) => (
             <View key={i} style={styles.listItem}>
-              <Text style={styles.listBullet}>•</Text>
-              <Text style={styles.listItemText}>{listItem}</Text>
+              <Text style={styles.listItemText}>
+                • {renderFormattedText(listItem, styles)}
+              </Text>
             </View>
           ))}
         </View>
@@ -364,8 +337,9 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ item, styles }) => {
         <View style={styles.listContainer}>
           {item.items?.map((listItem: string, i: number) => (
             <View key={i} style={styles.listItem}>
-              <Text style={styles.listBullet}>{`${i + 1}.`}</Text>
-              <Text style={styles.listItemText}>{listItem}</Text>
+              <Text style={styles.listItemText}>
+                {`${i + 1}. `}{renderFormattedText(listItem, styles)}
+              </Text>
             </View>
           ))}
         </View>
@@ -377,10 +351,12 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ item, styles }) => {
       return (
         <View style={styles.table}>
           {/* Header row */}
-          {item.headers && (
-            <View style={styles.tableRow}>
+          {item.headers && item.headers.length > 0 && (
+            <View style={[styles.tableRow, styles.tableHeader]}>
               {item.headers.map((header: string, i: number) => (
-                <Text key={i} style={styles.tableCellHeader}>{header}</Text>
+                <View key={i} style={styles.tableCellHeader}>
+                  <Text>{renderFormattedText(header, styles)}</Text>
+                </View>
               ))}
             </View>
           )}
@@ -389,7 +365,9 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ item, styles }) => {
           {item.rows.map((row: string[], rowIndex: number) => (
             <View key={rowIndex} style={styles.tableRow}>
               {row.map((cell: string, cellIndex: number) => (
-                <Text key={cellIndex} style={styles.tableCell}>{cell}</Text>
+                <View key={cellIndex} style={styles.tableCell}>
+                  <Text>{renderFormattedText(cell, styles)}</Text>
+                </View>
               ))}
             </View>
           ))}
@@ -397,12 +375,25 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ item, styles }) => {
       );
       
     case 'image':
-      return item.src ? (
+      if (!item.src) return null;
+      
+      // Ensure image dimensions are reasonable
+      const imageWidth = Math.min(item.width || 400, 500);
+      const imageHeight = Math.min(item.height || 300, 400);
+      
+      return (
         <View style={styles.image}>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-<Image src={item.src} style={{ width: item.width || 400, height: item.height || 300 }} />
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
+          <Image 
+            src={item.src} 
+            style={{ 
+              width: imageWidth, 
+              height: imageHeight,
+              objectFit: 'contain' // Prevent image distortion
+            }} 
+          />
         </View>
-      ) : null;
+      );
       
     case 'divider':
     case 'hr':
@@ -413,7 +404,8 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ item, styles }) => {
   }
 };
 
-interface ParserContext {
+// Fixed context interface
+interface ParsingContext {
   inCodeBlock: boolean;
   codeLanguage: string | null;
   inList: boolean;
@@ -426,12 +418,12 @@ interface ParserContext {
   listItems: string[];
 }
 
-// Enhanced markdown parser for PDF
+// Keep the same markdown parser but with proper typing
 export const parseMarkdownForPdf = (markdown: string): ContentItem[] => {
   const lines = markdown.split('\n');
   const result: ContentItem[] = [];
   
-  let currentContext: ParserContext = {
+  let currentContext: ParsingContext = {
     inCodeBlock: false,
     codeLanguage: null,
     inList: false,
@@ -482,7 +474,7 @@ export const parseMarkdownForPdf = (markdown: string): ContentItem[] => {
       }
     }
 
-    // Reset context
+    // Reset context with proper typing
     currentContext = {
       inCodeBlock: false,
       codeLanguage: null,
@@ -506,7 +498,6 @@ export const parseMarkdownForPdf = (markdown: string): ContentItem[] => {
       if (!currentContext.inCodeBlock) {
         flushContext();
         currentContext.inCodeBlock = true;
-        // Extract language if specified
         const langMatch = line.trim().match(/^```(\w+)$/);
         currentContext.codeLanguage = langMatch ? langMatch[1] : null;
       } else {
@@ -545,7 +536,6 @@ export const parseMarkdownForPdf = (markdown: string): ContentItem[] => {
       const cells = line.split('|').filter(cell => cell !== '');
       
       if (cells.length > 0) {
-        // Check if this is a table header separator line
         if (line.trim().match(/^\|?\s*[-:]+[-:|\s]*$/)) {
           currentContext.inTable = true;
           continue;
@@ -556,13 +546,11 @@ export const parseMarkdownForPdf = (markdown: string): ContentItem[] => {
           currentContext.inTable = true;
           currentContext.tableHeaders = cells.map(cell => cell.trim());
         } else if (cells.length === currentContext.tableHeaders.length) {
-          // Add table row
           currentContext.tableRows.push(cells.map(cell => cell.trim()));
         }
         continue;
       }
     } else if (currentContext.inTable) {
-      // End of table
       flushContext();
     }
 
@@ -640,27 +628,20 @@ export const parseMarkdownForPdf = (markdown: string): ContentItem[] => {
 interface ResearchReportPdfProps {
   topic: string;
   content: string;
-  isDarkMode?: boolean;
 }
 
-// Main PDF Document Component
-const ResearchReportPdf: React.FC<ResearchReportPdfProps> = ({ topic, content, isDarkMode = false }) => {
+// Main PDF Document Component - Simplified layout
+const ResearchReportPdf: React.FC<ResearchReportPdfProps> = ({ topic, content }) => {
   const parsedContent = parseMarkdownForPdf(content);
-  const styles = createPdfStyles(isDarkMode);
+  const styles = createPdfStyles();
   
   return (
     <Document>
-      <Page 
-        size="A4" 
-        style={styles.page}
-        wrap
-      >
-        {/* Header section */}
+      <Page size="A4" style={styles.page}>
+        {/* Simplified Header section */}
         <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <Text style={styles.title}>{topic}</Text>
-            <Text style={styles.subtitle}>Research Report</Text>
-          </View>
+          <Text style={styles.title}>{topic}</Text>
+          <Text style={styles.subtitle}>Research Report</Text>
         </View>
 
         {/* Document Content */}
@@ -670,35 +651,42 @@ const ResearchReportPdf: React.FC<ResearchReportPdfProps> = ({ topic, content, i
           ))}
         </View>
 
-        {/* Footer */}
-        <View fixed style={styles.footer}>
-          <Text style={styles.footerText}>{topic} | Research Report</Text>
-          <Text 
-            style={styles.pageNumber}
-            render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
-          />
+        {/* Simplified Footer */}
+        <View style={styles.footer}>
+          <Text>{topic} | Research Report</Text>
         </View>
       </Page>
     </Document>
   );
 };
 
-// PDF Generation Service
+// PDF Generation Service with better error handling
 export class EnhancedPdfGenerationService {
-  static async generatePdf(topic: string, content: string, isDarkMode = false) {
+  static async generatePdf(topic: string, content: string) {
     try {
-      // Import the pdf function only when needed to avoid SSR issues
+      // Validate inputs
+      if (!topic || !content) {
+        throw new Error('Topic and content are required');
+      }
+
+      // Import the pdf function only when needed
       const { pdf } = await import('@react-pdf/renderer');
-      return await pdf(<ResearchReportPdf topic={topic} content={content} isDarkMode={isDarkMode} />).toBlob();
+      const blob = await pdf(<ResearchReportPdf topic={topic} content={content} />).toBlob();
+      
+      if (!blob) {
+        throw new Error('Failed to generate PDF blob');
+      }
+      
+      return blob;
     } catch (error) {
       console.error("PDF generation failed:", error);
       throw new Error(`Failed to generate PDF: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
-  static async downloadPdf(topic: string, content: string, isDarkMode = false) {
+  static async downloadPdf(topic: string, content: string) {
     try {
-      const blob = await this.generatePdf(topic, content, isDarkMode);
+      const blob = await this.generatePdf(topic, content);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;

@@ -109,7 +109,7 @@ Your goal is to create a highly detailed, comprehensive, authoritative report on
   * Multiple examples showing different implementations where appropriate
   * Explanations before and after code blocks to provide context
   
-The report should be extensive and in-depth and , with a minimum length of 4000-5000 words. using the provided research findings.
+The report should be extensive and in-depth and , with a minimum length of 3000-4000 words. using the provided research findings.
 
 Important: You should prioritize being helpful, accurate and thorough over strictly limiting yourself to only the provided content. If the research findings don't adequately cover important aspects of the topic, use your knowledge to fill these gaps.
 

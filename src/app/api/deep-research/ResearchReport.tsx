@@ -120,7 +120,7 @@ const ResearchReport = ({ isDarkMode }: ResearchReportProps) => {
       const content = report.split("<report>")[1].split("</report>")[0];
       
       // Use the enhanced PDF generation service with dark mode matching the UI
-      await EnhancedPdfGenerationService.downloadPdf(topic, content, isDarkMode);
+      await EnhancedPdfGenerationService.downloadPdf(topic, content);
       
     } catch (error) {
       console.error("PDF generation failed:", error);
