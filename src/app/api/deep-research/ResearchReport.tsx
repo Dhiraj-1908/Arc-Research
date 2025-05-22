@@ -18,7 +18,7 @@ import {
   Check,
   FileText,
   FileCode,
-  FileImage,
+  Printer,
   Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -211,7 +211,7 @@ const ResearchReport = ({ isDarkMode }: ResearchReportProps) => {
                   onClick={handlePdfDownload}
                   disabled={pdfGenerating}
                 >
-                  <FileImage className={`w-4 h-4 ${theme.dropdownInactive}`} />
+                  <Printer className={`w-4 h-4 ${theme.dropdownInactive}`} />
                   <span>
                     {pdfGenerating ? (
                       <span className="flex items-center">

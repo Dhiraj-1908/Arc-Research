@@ -58,10 +58,11 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
     text: isDarkMode ? "text-gray-100" : "text-gray-800",
     mutedText: isDarkMode ? "text-gray-400" : "text-gray-500",
     
-    // Tab styling
-    tabBackground: isDarkMode ? "bg-gray-800" : "bg-white",
-    tabActive: isDarkMode ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-800",
-    tabInactive: isDarkMode ? "text-gray-300 hover:text-white" : "text-gray-500 hover:text-gray-800",
+    // Tab styling - Fixed for better dark mode visibility
+    tabBackground: isDarkMode ? "bg-gray-800/95" : "bg-white",
+    tabsList: isDarkMode ? "bg-gray-900/80" : "bg-white",
+    tabActive: isDarkMode ? "bg-blue-600 text-white border-blue-500" : "bg-gray-100 text-gray-800",
+    tabInactive: isDarkMode ? "text-gray-300 hover:text-white hover:bg-gray-700/50" : "text-gray-500 hover:text-gray-800 hover:bg-gray-50",
     
     // List items
     listItemBorder: isDarkMode ? "border-gray-700" : "border-gray-200",
@@ -99,10 +100,15 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
       defaultValue="activities" 
       className={`w-full h-full ${theme.shadow} backdrop-blur-sm rounded-xl overflow-hidden border ${theme.border}`}
     >
-      <TabsList className={`w-full px-2 py-4 ${theme.tabBackground} flex h-16`}>
+      <TabsList className={`w-full px-2 py-4 ${theme.tabsList} flex h-16 gap-1`}>
         <TabsTrigger
           value="activities"
-          className={`flex-1 flex items-center justify-center gap-2 data-[state=active]:${theme.tabActive} data-[state=inactive]:${theme.tabInactive} text-base`}
+          className={`
+            flex-1 flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-base font-medium transition-all duration-200
+            data-[state=active]:${theme.tabActive.replace(/\s+/g, ' ')}
+            data-[state=inactive]:${theme.tabInactive.replace(/\s+/g, ' ')}
+            ${isDarkMode ? 'data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/50 data-[state=active]:ring-1 data-[state=active]:ring-blue-400/30' : 'data-[state=active]:shadow-sm'}
+          `}
         >
           <Activity className="h-5 w-5" />
           <span>Activities</span>
@@ -110,7 +116,12 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
         {sources.length > 0 && (
           <TabsTrigger 
             value="sources"
-            className={`flex-1 flex items-center justify-center gap-2 data-[state=active]:${theme.tabActive} data-[state=inactive]:${theme.tabInactive} text-base`}
+            className={`
+              flex-1 flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-base font-medium transition-all duration-200
+              data-[state=active]:${theme.tabActive.replace(/\s+/g, ' ')}
+              data-[state=inactive]:${theme.tabInactive.replace(/\s+/g, ' ')}
+              ${isDarkMode ? 'data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/50 data-[state=active]:ring-1 data-[state=active]:ring-blue-400/30' : 'data-[state=active]:shadow-sm'}
+            `}
           >
             <FileText className="h-5 w-5" />
             <span>Sources</span>
