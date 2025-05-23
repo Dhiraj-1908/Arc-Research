@@ -5,9 +5,9 @@ import {
   Drawer,
   DrawerContent,
   DrawerTrigger,
-  DrawerTitle,  // Import DrawerTitle
+  DrawerTitle,
   DrawerHeader,
-  DrawerDescription,  // Import DrawerHeader for proper structure
+  DrawerDescription,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { 
@@ -33,24 +33,18 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
   const [isMobile, setIsMobile] = useState(false);
   
   useEffect(() => {
-    // Check if window exists (client-side)
     if (typeof window !== "undefined") {
       const checkMobile = () => {
         setIsMobile(window.innerWidth < 768);
       };
       
-      // Initial check
       checkMobile();
-      
-      // Add event listener for window resize
       window.addEventListener("resize", checkMobile);
-      
-      // Clean up
       return () => window.removeEventListener("resize", checkMobile);
     }
   }, []);
   
-  // Theme colors based on light/dark mode
+  // Enhanced theme colors with better mobile drawer support
   const theme = {
     // Base colors
     card: isDarkMode ? "bg-gray-800/95" : "bg-white/95",
@@ -58,7 +52,7 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
     text: isDarkMode ? "text-gray-100" : "text-gray-800",
     mutedText: isDarkMode ? "text-gray-400" : "text-gray-500",
     
-    // Tab styling - Fixed for better dark mode visibility
+    // Tab styling
     tabBackground: isDarkMode ? "bg-gray-800/95" : "bg-white",
     tabsList: isDarkMode ? "bg-gray-900/80" : "bg-white",
     tabActive: isDarkMode ? "bg-blue-600 text-white border-blue-500" : "bg-gray-100 text-gray-800",
@@ -85,6 +79,10 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
 
     // Icons
     iconColor: isDarkMode ? "text-blue-400" : "text-blue-600",
+
+    // Drawer specific
+    drawerBackground: isDarkMode ? "bg-gray-900" : "bg-white",
+    drawerHeader: isDarkMode ? "bg-gray-800" : "bg-gray-50",
   };
 
   if (activities.length === 0) return null;
@@ -203,7 +201,7 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
     </Tabs>
   );
 
-  // For mobile: return a drawer component
+  // For mobile: return a drawer component with proper dark mode support
   if (isMobile) {
     return (
       <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -211,7 +209,7 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
           <Button 
             variant="outline" 
             size="sm" 
-            className={`fixed top-4 left-4 z-30 flex items-center gap-2 ${theme.button} ${theme.border} ${theme.text} shadow-md`}
+            className={`fixed top-4 left-4 z-30 flex items-center gap-2 ${theme.button} border ${theme.border} ${theme.text} shadow-md`}
           >
             <Menu className="h-5 w-5" />
             <div className="flex items-center">
@@ -220,11 +218,19 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
             </div>
           </Button>
         </DrawerTrigger>
-        <DrawerContent className="h-[80vh]">
-          {/* Add the required DrawerHeader and DrawerTitle for accessibility */}
-          <DrawerHeader className="sr-only">
-            <DrawerTitle>Research Progress</DrawerTitle>
-            <DrawerDescription>View research activities and sources</DrawerDescription>
+        <DrawerContent className={`h-[80vh] ${theme.card} border-t ${theme.border}`}>
+          <DrawerHeader className={`px-4 py-3 ${theme.card} border-b ${theme.border}`}>
+            <div className="flex items-center gap-3">
+              <Activity className={`h-5 w-5 flex-shrink-0 ${theme.iconColor}`} />
+              <div>
+                <DrawerTitle className={`${theme.text} text-lg font-medium leading-none`}>
+                  Research Progress
+                </DrawerTitle>
+                <DrawerDescription className="sr-only">
+                  View research activities and sources
+                </DrawerDescription>
+              </div>
+            </div>
           </DrawerHeader>
           <div className="p-4 h-full">
             {content}
@@ -233,7 +239,6 @@ const ResearchActivities = ({ isDarkMode }: ResearchActivitiesProps) => {
       </Drawer>
     );
   }
-
   // For desktop: return the sidebar
   return (
     <motion.div 
